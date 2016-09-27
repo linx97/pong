@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		#game {
+			width: 800px;
+			height: 600px;
+			background-color: black;
+			position: relative;
+			border-radius: 7px;
+			clear: both;
+		}
+
+		#left_paddle, #right_paddle {
+			width: 20px;
+			height: 100px;
+			background-color: white;
+			border-radius: 2px;
+			position: absolute;
+		}
+
+		#ball {
+			width: 20px;
+			height: 20px;
+			background-color: white;
+			border-radius: 50%;
+			position: absolute;
+		}
+
+		h2 {
+			float: left;
+		}
+
+		#player {
+			margin-right: 10px;
+			margin-left: 175px;
+		}
+
+		#computer {
+			margin-right: 10px;
+			margin-left: 100px;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="scores">
+		<h2 id="player">Player Score:</h2>
+		<h2 id="player_score"></h2>
+		<h2 id="computer">Computer Score:</h2>
+		<h2 id="computer_score"></h2>
+	</div>
+
+
+
+	<div id="game">
+		<div id="left_paddle"></div>
+		<div id="right_paddle"></div>
+		<div id="ball"></div>
+	</div>
+
+	<script>
+		
+	var leftPaddle = document.getElementById("left_paddle");
+	var rightPaddle = document.getElementById("right_paddle");
+	var ball = document.getElementById("ball");
+
+	var leftPaddleX = 20;
+	var leftPaddleY = 100;
+
+	var rightPaddleX = 760;
+	var rightPaddleY = 100;
+
+	var ballX = 400;
+	var ballY = 300;
+
+	var ballVX = -2;
+	var ballVY = 2;
+
+	var playerScore = 0;
+	var computerScore = 0;
+
+	function draw() {
+		leftPaddle.style.top = leftPaddleY + "px";
+		leftPaddle.style.left = leftPaddleX + "px";
+
+		rightPaddle.style.top = rightPaddleY + "px";
+		rightPaddle.style.left = rightPaddleX + "px";
+
+		ball.style.top = ballY + "px";
+		ball.style.left = ballX + "px";
+	}
+
+	function updateBall() {
+		if( ballY >= (600 - 20) && ballVY > 0) {
+			ballVY = ballVY * -1;
+		}
+		if( ballY <= 0 && ballVY < 0) {
+			ballVY = ballVY * -1;
+		}
+
+		ballX += ballVX;
+		ballY += ballVY;
+	}
+
+	function handleMouseMove(event) {
+		leftPaddleY = event.pageY - event.target.offsetTop - 50;
+
+	}
+
+	function update() {
+		updateBall();
+		checkCollision();
+		computerMove();
+		scoring();
+	}
+
+	function checkCollision() {
+		if (ballX < leftPaddleX + 20
+			&& ballY < leftPaddleY + 100
+			&& ballX + 20 > leftPaddleX
+			&& ballY + 20 > leftPaddleY
+			&& ballVX < 0) {
+			ballVX *= -1;
+		}
+
+		if (ballX > rightPaddleX - 20
+			&& ballY + 20 > rightPaddleY) {
+			ballVX *= -1;
+		}
+	}
+
+	function computerMove() {
+		if (ballVX === 2) {
+			rightPaddleY = ballY;
+		}
+	}
+
+	function scoring() {
+		if (ballX === -10) {
+			computerScore += 1;
+			document.getElementById("computer_score").innerHTML = computerScore;
+			ballX = 400;
+			ballY = 300;
+		}
+
+		if (ballX === 810) {
+			playerScore += 1;
+			document.getElementById("player_score").innerHTML = playerScore;
+			ballX = 400;
+			ballY = 300;
+		}
+	}
+
+	function loop() {
+		update();
+		draw();
+	}
+
+	setInterval(loop, (500 / 60));
+
+	document.getElementById("game").onmousemove = handleMouseMove;
+
+	</script>
+</body>
+</html>
