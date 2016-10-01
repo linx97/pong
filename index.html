@@ -82,6 +82,8 @@
 	var playerScore = 0;
 	var computerScore = 0;
 
+	var random = Math.random();
+
 	function draw() {
 		leftPaddle.style.top = leftPaddleY + "px";
 		leftPaddle.style.left = leftPaddleX + "px";
@@ -127,26 +129,27 @@
 		}
 
 		if (ballX > rightPaddleX - 20
-			&& ballY + 20 > rightPaddleY) {
-			ballVX *= -1;
+			&& ballY + 20 > rightPaddleY
+			&& ballY < rightPaddleY + 100
+			) {
+			ballVX *= -1
 		}
 	}
 
 	function computerMove() {
-		if (ballVX === 2) {
-			rightPaddleY = ballY;
-		}
+		rightPaddleY = ballY;
+
 	}
 
 	function scoring() {
-		if (ballX === -10) {
+		if (ballX === -50) {
 			computerScore += 1;
 			document.getElementById("computer_score").innerHTML = computerScore;
 			ballX = 400;
 			ballY = 300;
 		}
 
-		if (ballX === 810) {
+		if (ballX === 850) {
 			playerScore += 1;
 			document.getElementById("player_score").innerHTML = playerScore;
 			ballX = 400;
